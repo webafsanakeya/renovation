@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
+
   if (!adminEmail || !adminPassword) {
     return NextResponse.json(
       { error: "server misconfigured" },
