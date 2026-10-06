@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
-import { Service } from "@/models/Service";
 import { slugify } from "@/lib/slugify";
 import { Project } from "@/models/Project";
 

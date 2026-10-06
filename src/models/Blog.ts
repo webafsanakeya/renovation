@@ -13,6 +13,9 @@ const blogSchema = new Schema(
     shortDescription: { type: String, required: true },
     content: { type: String, required: true },
     coverImage: { type: String, default: "" },
+    location: { type: String, default: "" },
+    completedAt: { type: Date },
+    gallery: { type: [String], default: [] },
     published: { type: Boolean, default: false },
     seo: {
       metaTitle: { type: String, default: "" },
@@ -29,5 +32,4 @@ const blogSchema = new Schema(
 
 export type BlogType = InferSchemaType<typeof blogSchema>;
 
-export const Blog =
-  mongoose.models.Blog || mongoose.model("Blog", blogSchema);
+export const Blog = mongoose.models.Blog || mongoose.model("Blog", blogSchema);
