@@ -39,7 +39,7 @@ export default function AdminDashboard() {
         className="mb-8 flex items-center justify-between"
       >
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-stone-900">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-stone-90">Dashboard</h1>
           <p className="text-sm text-muted-foreground">Welcome back, Admin</p>
         </div>
         <Button className="bg-amber-800 text-white hover:bg-amber-900" onClick={handleLogout}>
