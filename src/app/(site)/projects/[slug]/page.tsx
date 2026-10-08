@@ -34,7 +34,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         {item.location && item.completedAt && <span> · </span>}
         {item.completedAt && <span>Completed {formatDate(item.completedAt)}</span>}
       </p>
-      <CoverImage src={item.coverImage} alt={item.title} className="mt-8 aspect-video w-full rounded-xl" />
+     <CoverImage src={item.coverImage} alt={item.title} sizes="(min-width: 768px) 768px, 100vw" className="mt-8 aspect-video w-full rounded-xl" />
       <div className="mt-8 whitespace-pre-line text-base leading-relaxed text-stone-800">{item.content}</div>
 
       {item.gallery && item.gallery.length > 0 && (

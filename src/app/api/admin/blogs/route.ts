@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   } catch (error) {
     const err = error as { code?: number; name?: string; message?: string };
     if (err.code === 11000) {
-      return NextResponse.json({ error: "slug already exits" }, { status: 409 });
+      return NextResponse.json({ error: "Slug already exists" }, { status: 409 });
     }
     if (err.name === "ValidationError") {
       return NextResponse.json(

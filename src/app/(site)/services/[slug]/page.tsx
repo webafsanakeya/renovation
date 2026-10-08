@@ -28,7 +28,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       </Link>
       <h1 className="mt-3 text-4xl font-bold tracking-tight text-stone-900">{item.title}</h1>
       <p className="mt-3 text-lg text-stone-600">{item.shortDescription}</p>
-      <CoverImage src={item.coverImage} alt={item.title} className="mt-8 aspect-video w-full rounded-xl" />
+      <CoverImage src={item.coverImage} alt={item.title} sizes="(min-width: 768px) 768px, 100vw" className="mt-8 aspect-video w-full rounded-xl" />
       <div className="mt-8 whitespace-pre-line text-base leading-relaxed text-stone-800">{item.content}</div>
       <Link href="/contact" className="mt-10 inline-block rounded-full bg-amber-800 px-6 py-3 font-semibold text-white hover:bg-amber-900">
         Get a Free Quote

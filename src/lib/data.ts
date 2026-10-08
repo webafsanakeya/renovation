@@ -13,6 +13,7 @@ export type ContentItem = {
   published: boolean;
   createdAt: string;
   author?: string;
+  videoUrl?: string;
   location?: string;
   completedAt?: string;
   gallery?: string[];

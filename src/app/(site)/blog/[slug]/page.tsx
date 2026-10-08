@@ -5,6 +5,7 @@ import CoverImage from "@/components/site/CoverImage";
 import { getBlogBySlug } from "@/lib/data";
 import { buildMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/format";
+import { getYouTubeId } from "@/lib/youtube";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +22,8 @@ export default async function BlogDetailPage({ params }: Props) {
   const { slug } = await params;
   const item = await getBlogBySlug(slug);
   if (!item) notFound();
+
+  const videoId = getYouTubeId(item.videoUrl);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -42,7 +45,21 @@ export default async function BlogDetailPage({ params }: Props) {
       <p className="mt-3 text-sm text-stone-500">
         By {item.author || "Admin"} · {formatDate(item.createdAt)}
       </p>
-      <CoverImage src={item.coverImage} alt={item.title} className="mt-8 aspect-video w-full rounded-xl" />
+      <CoverImage src={item.coverImage} alt={item.title} sizes="(min-width: 768px) 768px, 100vw" className="mt-8 aspect-video w-full rounded-xl" />
+
+        {videoId && (
+        <div className="mt-8 aspect-video w-full overflow-hidden rounded-2xl bg-stone-900">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${videoId}`}
+            title={item.title}
+            className="h-full w-full"
+            loading="lazy"
+            allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      )}
+
       <div className="mt-8 whitespace-pre-line text-base leading-relaxed text-stone-800">{item.content}</div>
     </article>
   );
