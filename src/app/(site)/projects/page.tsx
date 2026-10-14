@@ -6,7 +6,9 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Projects",
-  description: "Browse our completed carpentry and home renovation projects.",
+  description:
+    "Renovation tips, carpentry guides and project stories from our team. Read our latest articles and watch our video walkthroughs.",
+  alternates: { canonical: "/projects" },
 };
 
 export default async function ProjectsPage() {
@@ -15,6 +17,7 @@ export default async function ProjectsPage() {
     <div className="mx-auto w-full max-w-6xl px-4 py-14">
       <h1 className="text-4xl font-bold tracking-tight text-stone-900">Our Projects</h1>
       <p className="mt-2 text-stone-600">A look at our finished work.</p>
+      <h2 className="sr-only">All projects</h2>
       {projects.length === 0 ? (
         <p className="mt-10 text-stone-500">No projects published yet.</p>
       ) : (
