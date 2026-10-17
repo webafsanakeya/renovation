@@ -26,7 +26,7 @@ export default function ContentCard({
           src={image}
           alt=""
           priority={priority}
-          className="aspect-[16/10] w-full transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+          className="aspect-16/10 w-full transition-transform duration-500 group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />
       </div>
       <div className="flex flex-1 flex-col p-6">

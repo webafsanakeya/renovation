@@ -43,7 +43,7 @@ export default function ContactPage() {
             </div>
             <div>
               <dt className="text-xs font-semibold uppercase tracking-wider text-amber-400">Email</dt>
-              <dd className="mt-1 break-words">
+              <dd className="mt-1 wrap-break-word">
                 <a href={`mailto:${SITE.email}`} className={`hover:underline ${focusRing}`}>
                   {SITE.email}
                 </a>

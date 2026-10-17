@@ -27,10 +27,17 @@ export default async function ServiceDetailPage({ params }: Props) {
         href="/services"
         className="inline-flex min-h-11 items-center text-sm font-medium text-amber-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
       >
-        <span aria-hidden="true" className="mr-1">←</span> All services
+        <span aria-hidden="true" className="mr-1">
+          ←
+        </span>{" "}
+        All services
       </Link>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">{item.title}</h1>
-      <p className="mt-4 text-lg leading-relaxed text-stone-600">{item.shortDescription}</p>
+      <h1 className="mt-2 text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">
+        {item.title}
+      </h1>
+      <p className="mt-4 text-lg leading-relaxed text-stone-600">
+        {item.shortDescription}
+      </p>
 
       <CoverImage
         src={item.coverImage}
@@ -52,7 +59,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           Interested in this service?
         </h2>
         <p className="mt-2 text-amber-100">
-          Tell us about your space and we will send a free, itemised quote.
+          Tell us about your space and we will send a free, itemized quote.
         </p>
         <Link
           href="/contact"
