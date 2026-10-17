@@ -36,31 +36,67 @@ export default async function BlogDetailPage({ params }: Props) {
   };
 
   return (
-    <article className="mx-auto w-full max-w-3xl px-4 py-14">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <Link href="/blog" className="text-sm font-medium text-amber-800 hover:underline">
-        ← All posts
-      </Link>
-      <h1 className="mt-3 text-4xl font-bold tracking-tight text-stone-900">{item.title}</h1>
-      <p className="mt-3 text-sm text-stone-500">
-        By {item.author || "Admin"} · {formatDate(item.createdAt)}
-      </p>
-      <CoverImage src={item.coverImage} alt={item.title} sizes="(min-width: 768px) 768px, 100vw" className="mt-8 aspect-video w-full rounded-xl" />
+    <article className="mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
 
-        {videoId && (
+      <Link
+        href="/blog"
+        className="inline-flex min-h-11 items-center text-sm font-medium text-amber-800 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700"
+      >
+        <span aria-hidden="true" className="mr-1">←</span> All posts
+      </Link>
+      <h1 className="mt-2 text-4xl font-bold tracking-tight text-stone-900 sm:text-5xl">{item.title}</h1>
+      <p className="mt-4 text-sm text-stone-500">
+        By {item.author || "Admin"} ·{" "}
+        <time dateTime={item.createdAt}>{formatDate(item.createdAt)}</time>
+      </p>
+
+      {videoId ? (
         <div className="mt-8 aspect-video w-full overflow-hidden rounded-2xl bg-stone-900">
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${videoId}`}
             title={item.title}
             className="h-full w-full"
             loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
             allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
         </div>
+      ) : (
+        <CoverImage
+          src={item.coverImage}
+          alt={item.title}
+          priority
+          sizes="(min-width: 768px) 704px, 100vw"
+          className="mt-8 aspect-video w-full rounded-2xl"
+        />
       )}
 
-      <div className="mt-8 whitespace-pre-line text-base leading-relaxed text-stone-800">{item.content}</div>
+      <div className="mt-10 whitespace-pre-line text-base leading-8 text-stone-800 sm:text-lg">
+        {item.content}
+      </div>
+
+      <section
+        aria-labelledby="blog-cta"
+        className="mt-14 rounded-2xl bg-amber-900 p-8 text-center text-white sm:p-10"
+      >
+        <h2 id="blog-cta" className="text-2xl font-bold sm:text-3xl">
+          Planning a project of your own?
+        </h2>
+        <p className="mt-2 text-amber-100">Tell us what you have in mind and get a free quote.</p>
+        <Link
+          href="/contact"
+          className="mt-6 inline-flex min-h-12 items-center rounded-full bg-white px-8 font-semibold text-amber-900 transition-colors hover:bg-amber-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          Get a Free Quote
+        </Link>
+      </section>
     </article>
   );
 }

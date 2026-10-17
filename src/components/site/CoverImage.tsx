@@ -28,9 +28,18 @@ export default function CoverImage({
   }
 
   // Unknown hosts fall back to a normal <img> so the page never crashes
+    // Unknown hosts fall back to a normal <img> so the page never crashes
   if (!canOptimize(src)) {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={src} alt={alt} loading="lazy" className={`object-cover ${className}`} />;
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={src}
+        alt={alt}
+        loading={priority ? "eager" : "lazy"}
+        decoding="async"
+        className={`object-cover ${className}`}
+      />
+    );
   }
 
   return (

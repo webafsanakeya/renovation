@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import ContentCard from "@/components/site/ContentCard";
+import Hero from "@/components/site/Hero";
 import LocalBusinessJsonLd from "@/components/site/LocalBusinessJsonLd";
 import { getServices, getProjects, getBlogs } from "@/lib/data";
 import { SITE } from "@/lib/site";
@@ -20,7 +21,9 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400";
+const focusRing = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-700";
+const container = "mx-auto max-w-6xl px-4 sm:px-6";
+const sectionY = "py-16 sm:py-20";
 
 const reasons = [
   { title: "Free Quote", text: "Clear, itemised pricing before any work begins." },
@@ -31,33 +34,44 @@ const reasons = [
 
 function Heading({
   id,
+  eyebrow,
   title,
   subtitle,
   href,
   linkLabel,
 }: {
   id: string;
+  eyebrow: string;
   title: string;
   subtitle: string;
   href: string;
   linkLabel: string;
 }) {
   return (
-    <div className="mb-8 flex items-end justify-between gap-4">
+    <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h2 id={id} className="text-3xl font-bold tracking-tight text-stone-900">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-800">{eyebrow}</p>
+        <h2 id={id} className="mt-2 text-3xl font-bold tracking-tight text-stone-900 sm:text-4xl">
           {title}
         </h2>
-        <p className="mt-1 text-stone-600">{subtitle}</p>
+        <p className="mt-2 text-stone-600">{subtitle}</p>
       </div>
       <Link
         href={href}
         aria-label={linkLabel}
-        className={`shrink-0 text-sm font-semibold text-amber-800 hover:underline ${focusRing}`}
+        className={`inline-flex min-h-11 shrink-0 items-center text-sm font-semibold text-amber-800 hover:underline ${focusRing}`}
       >
-        View all <span aria-hidden="true">→</span>
+        View all <span aria-hidden="true" className="ml-1">→</span>
       </Link>
     </div>
+  );
+}
+
+function Empty({ text }: { text: string }) {
+  return (
+    <p className="rounded-2xl border border-dashed border-stone-300 p-10 text-center text-stone-500">
+      {text}
+    </p>
   );
 }
 
@@ -72,53 +86,40 @@ export default async function HomePage() {
     <div className="w-full">
       <LocalBusinessJsonLd />
 
-      <section aria-labelledby="hero-heading" className="bg-linear-to-br from-stone-950 via-stone-900 to-amber-950 text-white">
-        <div className="mx-auto max-w-6xl px-4 py-20 sm:py-28">
-          <span className="rounded-full border border-white/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider">
-            Carpentry &amp; Home Renovation
-          </span>
-          <h1 id="hero-heading" className="mt-6 max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-6xl">
-            Custom Carpentry and Renovation, Built to Last
-          </h1>
-          <p className="mt-5 max-w-xl text-lg text-stone-300">{SITE.tagline}</p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link href="/contact" className={`rounded-full bg-amber-800 px-6 py-3 font-semibold hover:bg-amber-900 ${focusRing}`}>
-              Get Free Quote
-            </Link>
-            <Link href="/projects" className={`rounded-full border border-white/30 px-6 py-3 font-semibold hover:bg-white/10 ${focusRing}`}>
-              See Our Work
-            </Link>
-          </div>
-        </div>
-      </section>
+      <Hero />
 
-      <section aria-labelledby="why-heading" className="bg-white py-14">
+      <section aria-labelledby="why-heading" className="bg-white py-14 sm:py-16">
         <h2 id="why-heading" className="sr-only">
           Why choose {SITE.name}
         </h2>
-        <div className="mx-auto grid max-w-6xl gap-6 px-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className={`${container} grid gap-5 sm:grid-cols-2 lg:grid-cols-4`}>
           {reasons.map((r) => (
-            <div key={r.title} className="rounded-xl border border-stone-200 p-5">
-              <h3 className="font-semibold text-stone-900">
-                <span aria-hidden="true" className="text-amber-800">✓</span> {r.title}
-              </h3>
-              <p className="mt-1 text-sm text-stone-600">{r.text}</p>
+            <div key={r.title} className="rounded-2xl border border-stone-200 bg-stone-50/60 p-6">
+              <span
+                aria-hidden="true"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 font-bold text-amber-900"
+              >
+                ✓
+              </span>
+              <h3 className="mt-4 text-lg font-semibold text-stone-900">{r.title}</h3>
+              <p className="mt-1 text-sm leading-relaxed text-stone-600">{r.text}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section aria-labelledby="services-heading" className="bg-stone-50 py-16">
-        <div className="mx-auto max-w-6xl px-4">
+      <section aria-labelledby="services-heading" className={`bg-stone-50 ${sectionY}`}>
+        <div className={container}>
           <Heading
             id="services-heading"
+            eyebrow="What we do"
             title="Our Services"
             subtitle="What we can build for your home"
             href="/services"
             linkLabel="View all services"
           />
           {services.length === 0 ? (
-            <p className="text-stone-500">Services coming soon.</p>
+            <Empty text="Services coming soon." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {services.map((s) => (
@@ -129,17 +130,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="projects-heading" className="bg-white py-16">
-        <div className="mx-auto max-w-6xl px-4">
+      <section aria-labelledby="projects-heading" className={`bg-white ${sectionY}`}>
+        <div className={container}>
           <Heading
             id="projects-heading"
+            eyebrow="Our portfolio"
             title="Recent Projects"
             subtitle="A look at our finished work"
             href="/projects"
             linkLabel="View all projects"
           />
           {projects.length === 0 ? (
-            <p className="text-stone-500">Projects coming soon.</p>
+            <Empty text="Projects coming soon." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {projects.map((p) => (
@@ -150,17 +152,18 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="blog-heading" className="bg-stone-50 py-16">
-        <div className="mx-auto max-w-6xl px-4">
+      <section aria-labelledby="blog-heading" className={`bg-stone-50 ${sectionY}`}>
+        <div className={container}>
           <Heading
             id="blog-heading"
+            eyebrow="Journal"
             title="From the Blog"
             subtitle="Tips and ideas for your home"
             href="/blog"
             linkLabel="View all blog posts"
           />
           {blogs.length === 0 ? (
-            <p className="text-stone-500">Posts coming soon.</p>
+            <Empty text="Posts coming soon." />
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {blogs.map((b) => (
@@ -171,11 +174,16 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="cta-heading" className="bg-amber-900 py-14 text-center text-white">
-        <div className="mx-auto max-w-2xl px-4">
-          <h2 id="cta-heading" className="text-3xl font-bold">Ready to start your project?</h2>
-          <p className="mt-2 text-amber-100">Tell us what you have in mind and get a free quote.</p>
-          <Link href="/contact" className={`mt-6 inline-block rounded-full bg-white px-6 py-3 font-semibold text-amber-900 hover:bg-amber-50 ${focusRing}`}>
+      <section aria-labelledby="cta-heading" className={`bg-amber-900 text-center text-white ${sectionY}`}>
+        <div className="mx-auto max-w-2xl px-4 sm:px-6">
+          <h2 id="cta-heading" className="text-3xl font-bold sm:text-4xl">
+            Ready to start your project?
+          </h2>
+          <p className="mt-3 text-lg text-amber-100">Tell us what you have in mind and get a free quote.</p>
+          <Link
+            href="/contact"
+            className="mt-8 inline-flex min-h-12 items-center rounded-full bg-white px-8 font-semibold text-amber-900 transition-colors hover:bg-amber-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          >
             Contact Us
           </Link>
         </div>
