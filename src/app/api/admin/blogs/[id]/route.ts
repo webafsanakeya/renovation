@@ -3,6 +3,7 @@ import { slugify } from "@/lib/slugify";
 import { Blog } from "@/models/Blog";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
+import { validateContent } from "@/lib/content-validation";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -26,6 +27,10 @@ export async function PUT(req: Request, { params }: Ctx) {
     }
     await connectDB();
     const body = await req.json();
+    const check = validateContent(body, "blogs", { partial: true });
+if (!check.ok) {
+  return NextResponse.json({ error: "Please fix the highlighted fields.", errors: check.errors }, { status: 400 });
+}
     if (body.slug) body.slug = slugify(body.slug);
     const blog = await Blog.findByIdAndUpdate(id, body, {
       new: true,

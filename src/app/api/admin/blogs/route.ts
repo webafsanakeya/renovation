@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/mongodb";
 import { slugify } from "@/lib/slugify";
 import { Blog } from "@/models/Blog";
 import { NextResponse } from "next/server";
+import { validateContent } from "@/lib/content-validation";
 
 export async function GET() {
   await connectDB();
@@ -13,6 +14,10 @@ export async function POST(req: Request) {
   try {
     await connectDB();
     const body = await req.json();
+    const check = validateContent(body, "blogs");
+if (!check.ok) {
+  return NextResponse.json({ error: "Please fix the highlighted fields.", errors: check.errors }, { status: 400 });
+}
     const blog = await Blog.create({
       ...body,
       slug: slugify(body.slug || body.title || ""),

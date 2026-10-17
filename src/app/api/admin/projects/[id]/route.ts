@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { slugify } from "@/lib/slugify";
 import { Project } from "@/models/Project";
+import { validateContent } from "@/lib/content-validation";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -25,6 +26,10 @@ export async function PUT(req: Request, { params }: Ctx) {
     }
     await connectDB();
     const body = await req.json();
+    const check = validateContent(body, "projects", { partial: true });
+if (!check.ok) {
+  return NextResponse.json({ error: "Please fix the highlighted fields.", errors: check.errors }, { status: 400 });
+}
     if (body.slug) body.slug = slugify(body.slug);
     const project = await Project.findByIdAndUpdate(id, body, {
       new: true,
