@@ -1,59 +1,76 @@
-# Home Renovation Website
+# Crafting Renovation: Home Renovation & Carpentry Website
 
-A modern, responsive website for a home renovation and carpentry company, with an admin dashboard to manage all public content. Built with Next.js, TypeScript and MongoDB.
+A full-stack website for a home renovation and custom carpentry business, with a public marketing site and a protected admin dashboard for managing content.
 
-**Live site:** https://renovation-swart.vercel.app
-**Admin panel:** https://renovation-swart.vercel.app/admin
+**Live demo:** https://renovation-swart.vercel.app
+**Admin panel:** https://renovation-swart.vercel.app/admin/login
+**Admin credentials:** provided separately (not stored in this repository)
 
-## Admin Login
+---
 
-| | |
+## Tech Stack
+
+| Area | Technology |
 |---|---|
-| Email | `admin@renovation.com` |
-| Password | Provided in the submission email |
+| Framework | Next.js 16 (App Router), React, TypeScript |
+| Database | MongoDB Atlas with Mongoose |
+| Styling | Tailwind CSS v4, shadcn/ui, Framer Motion |
+| Auth | JWT (`jose`) in an httpOnly cookie, route protection in `proxy.ts` |
+| Hosting | Vercel |
+
+---
 
 ## Features
 
 ### Public website
-- Home, About, Services, Service details, Blog, Blog details, Projects, Project details, Contact
-- Content is loaded from MongoDB and rendered on the server for SEO
-- Only **published** content is shown to visitors
-- Contact form saves messages to the database
-- Fully responsive layout and optimised images (`next/image`)
+- Home, About, Services, Projects, Blog / Vlog, Contact and a custom 404 page
+- Detail pages for services, projects and blog posts (server-rendered, `generateMetadata` per page)
+- Blog posts can embed an optional YouTube video (privacy-enhanced `youtube-nocookie.com`)
+- Project pages with an image gallery
+- Contact form with client and server validation (including phone number), honeypot spam protection and stored messages
+- Responsive layout, keyboard-friendly navigation, visible focus states and semantic headings
 
 ### Admin dashboard
-- Secure login (JWT in an httpOnly cookie)
-- Create, edit, delete and publish/unpublish **Services**, **Blogs** and **Projects**
-- Changes appear on the public website immediately
-- Animated dashboard built with Framer Motion
+- Dashboard with content stats (total, published, draft) and recent contact messages
+- Full CRUD for Services, Blogs and Projects
+- Publish / unpublish toggle, only published items appear on the public site
+- Field-level validation (shared between client and server) with success and error toasts
+- Inline delete confirmation instead of a browser `confirm()` dialog
+- SEO management for every item: meta title, meta description, keywords, Open Graph fields, canonical URL, plus a simple SEO checklist and score
 
-### SEO management (bonus)
-Every service, blog and project has an SEO section in the admin form:
-- Meta title and meta description (with character counters)
-- Keywords
-- Open Graph title, description and image
-- Canonical URL
-- SEO-friendly slug (auto-generated from the title)
-- Live **SEO score and checklist** that suggests improvements
+### SEO
+- Unique title, description and canonical URL for each page
+- `LocalBusiness` JSON-LD on the home page and `BlogPosting` JSON-LD on posts
+- `sitemap.xml` and `robots.txt`
+- Optimized images with `next/image`, correct `sizes` and a prioritized hero image
 
-SEO output on the public site:
-- `generateMetadata` on every detail page (title, description, keywords, Open Graph, canonical)
-- `sitemap.xml` and `robots.txt` generated from the database
-- JSON-LD structured data on blog posts
+### Security
+- Admin session stored in an httpOnly, `sameSite=lax` cookie (`secure` in production)
+- `/admin/*` and `/api/admin/*` protected by `proxy.ts`
+- Login uses a generic error message, constant-time credential comparison and basic rate limiting
+- JSON-LD output is escaped to avoid script injection
 
-## Tech Stack
+---
 
-- **Next.js 16** (App Router) and **React**
-- **TypeScript**
-- **MongoDB Atlas** with **Mongoose**
-- **Tailwind CSS v4** and **shadcn/ui**
-- **Framer Motion**
-- **jose** for JWT authentication
-- Deployed on **Vercel**
+## Lighthouse (home page)
+
+Measured on the live site in an incognito window. Mobile emulation (Moto G Power), Slow 4G throttling, Lighthouse 13.4.1, 19 Oct 2026.
+
+| Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|
+| 94 | 100 | 100 | 100 |
+
+Core metrics: FCP 1.1 s, LCP 2.5 s, TBT 230 ms, CLS 0.
+
+---
 
 ## Getting Started
 
-### 1. Clone and install
+### Prerequisites
+- Node.js 20 or later
+- A MongoDB Atlas cluster (or any MongoDB instance)
+
+### Installation
 
 ```bash
 git clone https://github.com/webafsanakeya/renovation-site.git
@@ -61,78 +78,85 @@ cd renovation-site
 npm install
 ```
 
-### 2. Environment variables
+### Environment variables
 
 Create a `.env.local` file in the project root:
 
 ```env
-MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>.mongodb.net/renovation
-ADMIN_EMAIL=admin@example.com
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=a_long_random_string
+ADMIN_EMAIL=your_admin_email
 ADMIN_PASSWORD=your_admin_password
-JWT_SECRET=your_long_random_secret
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-| Variable | Description |
-|---|---|
-| `MONGODB_URI` | MongoDB Atlas connection string |
-| `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Admin login credentials |
-| `JWT_SECRET` | Secret used to sign the admin session token |
-| `NEXT_PUBLIC_SITE_URL` | Public site URL, used for canonical URLs and the sitemap |
+`.env.local` is git-ignored. Never commit real credentials.
 
-### 3. Run
+### Run
 
 ```bash
-npm run dev
+npm run dev      # development
+npm run build    # production build
+npm start        # run the production build
 ```
 
-Open http://localhost:3000. The admin panel is at http://localhost:3000/admin.
+Open http://localhost:3000. Log in at `/admin/login` with the admin credentials from your `.env.local`.
 
-### 4. Production build
-
-```bash
-npm run build
-npm start
-```
+---
 
 ## Project Structure
 
 ```
 src/
-├── app/
-│   ├── (site)/            # Public pages (Home, About, Services, Blog, Projects, Contact)
-│   ├── admin/             # Admin dashboard and login
-│   ├── api/
-│   │   ├── admin/         # Protected CRUD APIs (services, blogs, projects)
-│   │   ├── auth/          # Login and logout
-│   │   └── contact/       # Public contact form endpoint
-│   ├── sitemap.ts
-│   └── robots.ts
-├── components/
-│   ├── admin/             # Reusable admin CRUD component
-│   └── site/              # Navbar, Footer, cards, forms
-├── lib/                   # DB connection, auth, SEO and data helpers
-├── models/                # Mongoose models (Service, Blog, Project, Message)
-└── proxy.ts               # Protects /admin and /api/admin routes
+  app/
+    (site)/            public pages (home, services, projects, blog, about, contact)
+    admin/             dashboard, login and resource management pages
+    api/
+      admin/           protected CRUD and stats endpoints
+      auth/            login and logout
+      contact/         public contact form endpoint
+  components/
+    site/              public UI (navbar, footer, hero, cards, forms)
+    admin/             ResourceManager (shared CRUD UI)
+    ui/                shadcn/ui components
+  lib/                 database, auth, validation, SEO helpers
+  models/              Mongoose models (Service, Blog, Project, Message)
+  proxy.ts             route protection for admin pages and APIs
 ```
 
-## API Overview
+---
 
-| Method | Route | Description |
-|---|---|---|
-| POST | `/api/auth/login` | Admin login |
-| POST | `/api/auth/logout` | Admin logout |
-| GET, POST | `/api/admin/{services,blogs,projects}` | List and create (admin only) |
-| GET, PUT, DELETE | `/api/admin/{services,blogs,projects}/[id]` | Read, update, delete (admin only) |
-| POST | `/api/contact` | Submit a contact message |
+## Design Decisions
 
-## Notes
+- **One reusable `ResourceManager`** powers CRUD for all three content types, so validation, feedback and layout stay consistent.
+- **Shared validation modules** are used by both the forms and the API routes, so the rules cannot drift apart.
+- **Server Components by default.** Only interactive parts (navbar, forms, admin UI) are client components.
+- **Unknown image hosts fall back to a plain `<img>`** so a bad URL never crashes a page.
 
-- Sample content (projects, locations, blog posts) is for demonstration only.
-- Images are from [Unsplash](https://unsplash.com) (free license) or placeholders.
-- Design is inspired by common home renovation websites. No text or images were copied from any reference site.
+---
+
+## Version 2 Improvements
+
+This project was first built as a technical assessment. After receiving a review, I improved it in four areas:
+
+1. **SEO:** unique metadata and canonical URLs, structured data, semantic heading order.
+2. **Forms and validation:** phone, email and content validation on both client and server, with clear inline errors.
+3. **Admin and auth:** stats dashboard, redesigned login with safer error handling and rate limiting, CRUD validation with toast feedback.
+4. **Design and accessibility:** typography, spacing and card consistency, hero image, keyboard focus states, and contrast fixes.
+
+---
+
+## Known Limitations and Next Steps
+
+- Public pages use `force-dynamic`. Moving to ISR with on-demand revalidation would cut response time further.
+- Login rate limiting is in-memory, so on serverless hosting it is best-effort. A shared store such as Redis would make it strict.
+- Image upload is URL-based. Direct upload to cloud storage would be a natural next feature.
+- Automated tests (API routes and validation) are not included yet.
+
+---
 
 ## Author
 
-Afsana Noor Keya
-GitHub: [@webafsanakeya](https://github.com/webafsanakeya)
+**Afsana Noor Keya**, full-stack developer
+GitHub: [webafsanakeya](https://github.com/webafsanakeya)
+LinkedIn: [linkedin.com/in/web-afsana-noor-keya-](https://www.linkedin.com/in/web-afsana-noor-keya-)
