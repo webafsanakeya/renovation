@@ -324,10 +324,7 @@ export function HowWeWork() {
                 key={s.title}
                 className="relative rounded-2xl border border-white/10 bg-white/5 p-6"
               >
-                <span
-                  aria-hidden="true"
-                  className="absolute right-5 top-4 text-5xl font-bold text-white/10"
-                >
+              <span aria-hidden="true" className="absolute right-5 top-4 text-4xl font-bold text-amber-400">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <Icon aria-hidden="true" className="h-8 w-8 text-amber-400" />

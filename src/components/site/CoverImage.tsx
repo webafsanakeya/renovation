@@ -44,7 +44,15 @@ export default function CoverImage({
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
-      <Image src={src} alt={alt} fill sizes={sizes} priority={priority} className="object-cover" />
+     <Image
+  src={src}
+  alt={alt}
+  fill
+  sizes={sizes}
+  loading={priority ? "eager" : undefined}
+  fetchPriority={priority ? "high" : undefined}
+  className="object-cover"
+/>
     </div>
   );
 }

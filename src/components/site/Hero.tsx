@@ -19,14 +19,15 @@ export default function Hero() {
       aria-labelledby="hero-heading"
       className="relative isolate overflow-hidden bg-stone-950 text-white"
     >
-      <Image
-        src="/images/hero.jpg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="-z-20 object-cover"
-      />
+   <Image
+  src="/images/hero.jpg"
+  alt=""
+  fill
+  loading="eager"
+  fetchPriority="high"
+  sizes="100vw"
+  className="-z-20 object-cover"
+/>
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 bg-linear-to-r from-stone-950/90 via-stone-950/70 to-stone-950/20"
